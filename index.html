@@ -154,7 +154,7 @@
       map = L.map('map', options); // Create map object and pass it our options object from above
 
       // Load a map tile and add it to the map
-      var tiles = L.tileLayer('https://cartocdn_{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+      var tiles = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
           subdomains: 'abcd',
           maxZoom: 19
