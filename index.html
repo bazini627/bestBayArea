@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Economic Security In The Bay Area</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <!-- latest version of jquery -->
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <!-- latest version of leaflet.js -->
+  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  <!-- latest version of papaparse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+
+  <!-- style sheet for leaflet.js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+  <!-- style sheet for google fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+
+  <style>
+    body {
+      margin:0;
+      padding:0;
+      background: whitesmoke;
+      font-family: "Vollkorn";
+    }
+    #map {
+      position:absolute;
+      top:0;
+      bottom:0;
+      right: 0;
+      width: 67%;
+    }
+    #side-panel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 33%;
+      background: whitesmoke;
+      border-right: 2px solid #1C9976;
+      overflow-y: scroll;
+    }
+    h1 {
+      padding: 8px 25px 8px 15px;
+      margin: 0;
+      background: #b3de69;
+      color: whitesmoke;
+      font-weight: 400;
+      font-size: 1.2em;
+      text-align: center;
+    }
+    h2 {
+      margin: 0;
+      padding: 8px 25px 8px 15px;
+      color: #b3de69;
+      font-weight: 500;
+      font-size: 1.2em;
+      text-align: center;
+    }
+    #side-panel p {
+      margin: 8px 0 4px;
+      padding: 0 25px 0 15px;
+      color: #3d3d3d;
+      font-size: 1em;
+    }
+    #side-panel p:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    .legend {
+      padding: 6px 8px;
+      font-size: 1em;
+      background: rgba(255, 255, 255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,2);
+      border-radius: 5px;
+    }
+    .legend h3 {
+      font-size: 1.1em;
+      font-weight: normal;
+      color: #001323;
+      margin: 0 0 10px 0;
+    }
+    .legend span {
+      width: 20px;
+      height: 20px;
+      float: left;
+      border: 1px solid;
+      margin: 0 10px 4px 0;
+    }
+    .legend label {
+      font-size: 1.1em;
+    }
+    .legend label:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    .info {
+      padding: 6px 8px;
+      font-size: 1em;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      text-align: right;
+    }
+    .info h3 {
+      margin: 0;
+    }
+    #ui-controls {
+      position: relative;
+      margin-left: 34%;
+      z-index: 650;
+    }
+    #ui-controls label {
+      font-size: 1em;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id='ui-controls'>
+    <label>Choose A Family Type:</label>
+    <select id="FamilyType">
+      <option value="1 worker(s)" selected>Single Worker</option>
+      <option value="1 worker(s), 1 infant(s)">Single Worker, One Infant</option>
+      <option value="2 worker(s)">Two Workers</option>
+      <option value="2 worker(s), 1 infant(s)">Two Workers, One Infant</option>
+    </select>
+  </div>
+  <div id='map'></div>
+  <div id='side-panel'>
+    <h1>What Does It Take To Live In The Bay Area?</h1>
+    <h2>Economic Security In Bay Area Counties</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mollis laoreet elementum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec mi eros, rutrum sed orci eget, venenatis varius est. Pellentesque accumsan est vitae risus malesuada fringilla.</p>
+    <p>Cras at massa in leo aliquam fermentum. Nunc auctor vestibulum sagittis. Aliquam pulvinar, ipsum in pulvinar tincidunt, enim metus fermentum tellus, quis accumsan ex lorem ut ante. Phasellus fermentum orci eget interdum ultrices. Proin vitae magna id odio ultricies placerat quis id ex. Aenean volutpat volutpat gravida.</p>
+    <h2>About This Map</h2>
+    <p>Phasellus in ante nec augue pulvinar pellentesque id vitae nunc. Donec tincidunt metus metus, sed rhoncus ex vehicula sed. Donec erat felis, dignissim bibendum metus ut, tincidunt dictum ligula. Aliquam interdum gravida enim id aliquet. Duis sed ex sed mi aliquam hendrerit. Nunc egestas in lorem ac consectetur. Donec quis rhoncus metus.</p>
+    <h2>About The Data</h2>
+    <p>Phasellus in ante nec augue pulvinar pellentesque id vitae nunc. Donec tincidunt metus metus, sed rhoncus ex vehicula sed. Donec erat felis, dignissim bibendum metus ut, tincidunt dictum ligula. Aliquam interdum gravida enim id aliquet. Duis sed ex sed mi aliquam hendrerit. Nunc egestas in lorem ac consectetur. Donec quis rhoncus metus.</p>
+  </div>
+
+  <script>
+      // Object to hold our map options
+      var options = {
+        center: [37.8741, -122.25],
+        zoom: 8,
+        minZoom: 8,
+        maxZoom: 8,
+        zoomControl: false,
+      },
+      datalayer, // Global variable for map units
+      attribute = "FamilyType",
+      map = L.map('map', options); // Create map object and pass it our options object from above
+
+      // Load a map tile and add it to the map
+      var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
+      }).addTo(map);
+
+      // AJAX request to load our GeoJSON and CSV file)
+      $.getJSON("bayAreaCounties.geojson", function(counties) {
+
+        // Use the parse method from PapaParse to work with our csv
+        Papa.parse('bestBayArea.csv', {
+          download: true,
+          header: true,
+          complete: function(data) {
+            console.log(data);
+            processData(counties, data); // Calls on processData function from below
+          }
+        })
+      })
+
+      // Error catching with jquery fail method in case there is an issue with loading the GeoJSON
+      .fail(function() {
+        // Error message to let us know there is an issue with loading the GeoJSON
+        console.log("Unable to load your GeoJSON file");
+      });
+
+      // Function to process/bind CSV data to our geometry data in the GeoJSON
+      function processData(counties, data) {
+
+        // Nested loop for our objects, loop through the counties GeoJSON first
+        for (var county in counties.features) {
+
+          var props = counties.features[county].properties;  // Shorthand for each county's properties
+          // Loop through our BEST csv data
+          for (var d in data.data) {
+            // county and county are our matching fields
+            if (props.county == data.data[d].county) {
+              counties.features[county].properties = data.data[d];
+              break; // Once we have a match from the loop
+            }
+          }
+        }
+        drawMap(counties);  // Call funtion to draw the counties from the GeoJSON
+        drawInfo(); // Call function to draw the info panel
+        buildUI();  // Call function to build the ui dropdown
+      }
+
+      // Function to draw counties to the map
+      function drawMap(counties) {
+        dataLayer = L.geoJson(counties, {
+          style: style // Using our style function from below
+        }).addTo(map);
+        drawLegend(); // Call drawLegend function since we'll need the legend once the map is drawn
+
+        dataLayer.eachLayer(function(layer) {
+
+          // Highlight the layer and update info window on a mouseover
+          layer.on('mouseover', function() {
+
+            // Pass 'this'(layer/county moused over) to highlightFeature and updateInfo functions from below
+            highlightFeature(this);
+            updateInfo(this);
+          });
+
+          // Show info window when county is moused over
+          dataLayer.on('mouseover', function() {
+
+            // Use jquery show method to display the info window
+            $(".info").show();
+          });
+
+          // Remove the highlight on a mouseout
+          layer.on('mouseout', function() {
+
+            // Pass 'this' (layer/county currently highlighted) to unHighlightFeature function from below
+            unHighlightFeature(this);
+          });
+
+          // Hide info panel when the map is moused out of
+          dataLayer.on('mouseout', function() {
+
+            // Use jquery hide method to hide the info window
+            $(".info").hide();
+          })
+        })
+      }
+
+      // Function to color our counties
+      function getColor(d) {
+        return d == "Alameda"        ? '#8dd3c7' :
+               d == "Contra Costa"   ? '#ffffb3' :
+               d == "Marin"          ? '#bebada' :
+               d == "Napa"           ? '#fb8072' :
+               d == "San Francisco"  ? '#80b1d3' :
+               d == "San Mateo"      ? '#fdb462' :
+               d == "Santa Clara"    ? '#bc80bd' :
+               d == "Solano"         ? '#fccde5' :
+                                       '#d9d9d9';
+      }
+
+      // Function to set the style of our counties
+      function style(feature) {
+        return {
+          fillColor: getColor(feature.properties.county),
+          weight: 1,
+          opacity: 1,
+          color: 'black',
+          fillOpacity: 0.7
+        };
+      }
+
+      // Function to create legend
+      function drawLegend() {
+
+        // Variable for our Leaflet Control object
+        var legend = L.control({position: 'bottomleft'});
+
+        // Anonymous function to create html elements of our legend
+        legend.onAdd = function () {
+
+          var div      = L.DomUtil.create('div', 'legend'),
+          counties     = ['Alameda', 'Contra Costa', 'Marin', 'Napa', 'San Francisco', 'San Mateo', 'Santa Clara', 'Solano', 'Sonoma'];
+
+          div.innerHTML = "<h3>" + "Bay Area Counties" + "</h3>";
+
+          // Loop through our counties array declared above
+          for (var i = 0; i < counties.length; i++) {
+
+            var color = getColor(counties[i]); // variable to hold color for each county from getColor function
+
+            // Build structure of the legend
+            div.innerHTML += '<span style="background:' + color + '"></span> ' + '<label>' + counties[i] + '</label>';
+          }
+          return div;
+        };
+        legend.addTo(map);
+      }
+
+      // Function to highlight county to be used with a mouseover
+      function highlightFeature(layer) {
+        layer.setStyle({
+          weight: 5,
+          color: 'yellow',
+          fillOpacity: 1
+        });
+        layer.bringToFront();
+      }
+
+      // Function to unhighlight our highlighted county
+      function unHighlightFeature(layer) {
+        layer.setStyle({
+          weight: 1,
+          color: 'black',
+        });
+      }
+
+      // Function to draw an empty info panel which will be populated with info from our geojson
+      function drawInfo() {
+
+        // Placing our info panel on the top right of our page
+        var info = L.control( {position: 'topright'} );
+
+        // Anonymous function to create html elements of our info panel
+        info.onAdd = function(map) {
+
+          var div = L.DomUtil.create('div', 'info');
+          return div;
+        }
+        info.addTo(map);
+
+        // Initially hide info panel with jQuery hide method
+        $(".info").hide();
+      }
+
+      // Function to update our info panel
+      function updateInfo(layer) {
+
+        var props = layer.feature.properties; // create shorthand variable for properties again
+
+        var html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['Housing'] + "</b><br>" + "Utilities: <b>$" + props['Utilities'] + "</b><br>" + "Food: <b>$" + props['Food'] + "</b><br>" + "Transportation: <b>$" + props['Transportation'] + "</b><br>" + "Childcare: <b>$" + props['ChildCare'] + "</b><br>" + "Personal & Household Items: <b>$" + props['PersonalAndHouseholdItems']  + "</b><br>" + "Healthcare: <b>$" + props['Healthcare'] + "</b><br>" + "Emergency Savings: <b>$" + props['EmergencySavings'] + "</b><br>" + "Retirement Savings: <b>$" + props['RetirementSavings'] + "</b><br>" + "Taxes: <b>$" + props['Taxes'] + "</b><br>" + "Tax Credits: <b>$" + props['TaxCredits'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['MonthlyTotal'] + "</b><br>" + "Annual Total: <b>$" + props['AnnualTotal'] + "</b><br>" + "Hourly Wage: <b>$" + props['HourlyWage'];
+
+        // Use jQuery html method to populate panel
+        $(".info").html(html);
+      }
+
+      // Function to get our drop down data switching working
+      function buildUI() {
+        // Use the 'FamilyType' id we set previosly in our generic div wrapper in our jquery select
+        $('select[id="FamilyType"]').change(function() {
+
+          // Make new assignment to our global 'attribute' variable with a selection from the drop down
+          attribute = $(this).val();
+        })
+      }
+  </script>
+</body>
+</html>

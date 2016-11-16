@@ -1,0 +1,20 @@
+F1 = Single Worker
+F2 = Single Worker, 1 infant
+F3 = Two Workers
+F4 = Two Worker, 1 infant
+
+
+A1  = Housing
+A2  = Utilities
+A3  = Food
+A4  = Transportation
+A5  = Childcare
+A6  = Personal & Household Item
+A7  = Healthcare
+A8  = Emergency Savings
+A9  = Retirement Savings
+A10 = Taxes
+A11 = Tax Credits
+A12 = Monthly Total
+A13 = Annual Total
+A14 = Hourly Wage
