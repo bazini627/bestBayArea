@@ -150,7 +150,6 @@
         zoomControl: false,
       },
       datalayer, // Global variable for map units
-      attribute = "FamilyType",
       map = L.map('map', options); // Create map object and pass it our options object from above
 
       // Load a map tile and add it to the map
@@ -333,7 +332,7 @@
 
         var props = layer.feature.properties; // create shorthand variable for properties again
 
-        var html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['Housing'] + "</b><br>" + "Utilities: <b>$" + props['Utilities'] + "</b><br>" + "Food: <b>$" + props['Food'] + "</b><br>" + "Transportation: <b>$" + props['Transportation'] + "</b><br>" + "Childcare: <b>$" + props['ChildCare'] + "</b><br>" + "Personal & Household Items: <b>$" + props['PersonalAndHouseholdItems']  + "</b><br>" + "Healthcare: <b>$" + props['Healthcare'] + "</b><br>" + "Emergency Savings: <b>$" + props['EmergencySavings'] + "</b><br>" + "Retirement Savings: <b>$" + props['RetirementSavings'] + "</b><br>" + "Taxes: <b>$" + props['Taxes'] + "</b><br>" + "Tax Credits: <b>$" + props['TaxCredits'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['MonthlyTotal'] + "</b><br>" + "Annual Total: <b>$" + props['AnnualTotal'] + "</b><br>" + "Hourly Wage: <b>$" + props['HourlyWage'];
+        var html = "<h3>" + props['county'] + " County: " + "</h3>" + "Housing: <b>$" + props['a1f1'] + "</b><br>" + "Utilities: <b>$" + props['a2f1'] + "</b><br>" + "Food: <b>$" + props['a3f1'] + "</b><br>" + "Transportation: <b>$" + props['a4f1'] + "</b><br>" + "Childcare: <b>$" + props['a5f1'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f1']  + "</b><br>" + "Healthcare: <b>$" + props['a7f1'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f1'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f1'] + "</b><br>" + "Taxes: <b>$" + props['a10f1'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f1'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f1'] + "</b><br>" + "Annual Total: <b>$" + props['a13f1'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f1'];
 
         // Use jQuery html method to populate panel
         $(".info").html(html);
@@ -341,12 +340,6 @@
 
       // Function to get our drop down data switching working
       function buildUI() {
-        // Use the 'FamilyType' id we set previosly in our generic div wrapper in our jquery select
-        $('select[id="FamilyType"]').change(function() {
-
-          // Make new assignment to our global 'attribute' variable with a selection from the drop down
-          attribute = $(this).val();
-        })
       }
   </script>
 </body>
