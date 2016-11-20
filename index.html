@@ -150,7 +150,6 @@
         zoomControl: false,
       },
       datalayer, // Global variable for map units
-      attribute = "FamilyType",
       map = L.map('map', options); // Create map object and pass it our options object from above
 
       // Load a map tile and add it to the map
@@ -341,12 +340,6 @@
 
       // Function to get our drop down data switching working
       function buildUI() {
-        // Use the 'FamilyType' id we set previosly in our generic div wrapper in our jquery select
-        $('select[id="FamilyType"]').change(function() {
-
-          // Make new assignment to our global 'attribute' variable with a selection from the drop down
-          attribute = $(this).val();
-        })
       }
   </script>
 </body>
