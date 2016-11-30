@@ -134,7 +134,35 @@
       line-opacity: 0.5;
     }
   </script>
-
+  <!-- Div For CARTO Infowindow -->
+  <script type="infowindow/html" id="infowindow_template">
+      <div class="cartodb-popup">
+        <a href="#close" class="cartodb-popup-close-button close">x</a>
+         <div class="cartodb-popup-content-wrapper">
+           <div class="cartodb-popup-content">
+             <font:color=black>
+             <h4>County: {{county}}</h4>
+             <h4>Housing Costs: ${{a1f1}}</h4>
+             <h4>Utilities Costs: ${{a2f1}}</h4>
+             <h4>Food Costs: ${{a3f1}}</h4>
+             <h4>Transportation Costs: ${{a4f1}}</h4>
+             <h4>Childcare Costs: ${{a5f1}}</h4>
+             <h4>Personal And Household Item Costs: ${{a6f1}}</h4>
+             <h4>Healthcare Costs: ${{a7f1}}</h4>
+             <h4>Emergency Savings: ${{a8f1}}</h4>
+             <h4>Retirement Savings: ${{a9f1}}</h4>
+             <h4>Taxes: ${{a10f1}}</h4>
+             <h4>Tax Credits: ${{a11f1}}</h4>
+             <h4>Monthly Total: ${{a12f1}}</h4>
+             <h4>Annual Total: ${{a13f1}}</h4>
+             <h4>Hourly Wage: ${{a14f1}}</h4>
+             </font>
+           </div>
+         </div>
+         <div class="cartodb-popup-tip-container"></div>
+      </div>
+    </script>
+  
   <script>
 
     // Object to hold our map options
