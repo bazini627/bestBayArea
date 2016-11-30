@@ -136,6 +136,7 @@
   </script>
 
   <script>
+
     // Object to hold our map options
     var options = {
       center: [37.8741, -122.25],
@@ -153,11 +154,6 @@
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19
-    }).addTo(map);
-
-    // Move zoom control to the right
-    L.control.zoom({
-      position:'topright'
     }).addTo(map);
 
     // Our CARTO data
