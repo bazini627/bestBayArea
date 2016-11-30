@@ -177,6 +177,19 @@
       console.log(err);
     });
 
+    // Function to color our counties
+    function getColor(d) {
+      return d == "Alameda"        ? '#8dd3c7' :
+             d == "Contra Costa"   ? '#ffffb3' :
+             d == "Marin"          ? '#bebada' :
+             d == "Napa"           ? '#fb8072' :
+             d == "San Francisco"  ? '#80b1d3' :
+             d == "San Mateo"      ? '#fdb462' :
+             d == "Santa Clara"    ? '#bc80bd' :
+             d == "Solano"         ? '#fccde5' :
+                                     '#d9d9d9';
+    }
+
     // Function to create legend
     function drawLegend() {
       // Variable for our Leaflet Control object
