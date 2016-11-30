@@ -167,7 +167,13 @@
         }
       ]
     }
-
+    
+    // Call to functions on window load
+    window.onload = function () {
+      drawMap();
+      drawLegend();
+    }
+    
     // Function to draw map
     function drawMap() { 
       cartodb.createLayer(map, sourceObject).addTo(map)
