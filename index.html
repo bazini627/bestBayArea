@@ -212,8 +212,16 @@
         // Get the first sublayer and assign to variable to be passed to addInfowindow
         var sublayer = layer.getSubLayer(0);
         
+        // Another infowindow option
+        cartodb.vis.Vis.addInfowindow(map, sublayer, ['county', 'a1f1', 'a2f1','a3f1','a4f1','a5f1','a6f1','a7f1','a8f1','a9f1','a10f1','a11f1','a12f1','a13f1','a14f1'],{
+        infowindowTemplate: $('#infowindow_template').html(),
+                 templateType: 'mustache',
+                 //triggerEvent: 'featureClick',
+                 //cursorInteraction: true
+      });
+        
         // Create info window
-        cartodb.vis.Vis.addInfowindow(map, sublayer, ['county', 'a1f1', 'a2f1','a3f1','a4f1','a5f1','a6f1','a7f1','a8f1','a9f1','a10f1','a11f1','a12f1','a13f1','a14f1']);
+        //cartodb.vis.Vis.addInfowindow(map, sublayer, ['county', 'a1f1', 'a2f1','a3f1','a4f1','a5f1','a6f1','a7f1','a8f1','a9f1','a10f1','a11f1','a12f1','a13f1','a14f1']);
       })
       .on('error', function(err) {
         
