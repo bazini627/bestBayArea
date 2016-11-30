@@ -168,14 +168,16 @@
       ]
     }
 
-    // Add map to page
-    cartodb.createLayer(map, sourceObject).addTo(map)
-    .on('done', function(layer) {
-      console.log("Map loaded")
-    })
-    .on('error', function(err) {
-      console.log(err);
-    });
+    // Function to draw map
+    function drawMap() { 
+      cartodb.createLayer(map, sourceObject).addTo(map)
+      .on('done', function(layer) {
+        console.log("Map loaded")
+      })
+      .on('error', function(err) {
+        console.log(err);
+      });
+    }
 
     // Function to color our counties
     function getColor(d) {
