@@ -177,23 +177,31 @@
       console.log(err);
     });
 
-    // Create a legend for our counties
-    var legend = new cdb.geo.ui.Legend.Custom({
-      type: "custom",
-      title: "Bay Area Counties",
-      data: [
-        { name: "Alameda",       value: "#8dd3c7" },
-        { name: "Contra Costa",  value: "#ffffb3" },
-        { name: "Marin",         value: "#bebada" },
-        { name: "Napa",          value: "#fb8072" },
-        { name: "San Francisco", value: "#80b1d3" },
-        { name: "San Mateo",     value: "#fdb462" },
-        { name: "Santa Clara",   value: "#bc80bd" },
-        { name: "Solano",        value: "#fccde5" },
-        { name: "Sonoma",        value: "#d9d9d9" }
-      ]
-    });
-    $('#map').append(legend.render().el);
+    // Function to create legend
+    function drawLegend() {
+      // Variable for our Leaflet Control object
+      var legend = L.control({position: 'bottomleft'});
+
+      // Anonymous function to create html elements of our legend
+      legend.onAdd = function () {
+
+        var div      = L.DomUtil.create('div', 'legend'),
+        counties     = ['Alameda', 'Contra Costa', 'Marin', 'Napa', 'San Francisco', 'San Mateo', 'Santa Clara', 'Solano', 'Sonoma'];
+
+        div.innerHTML = "<h3>" + "Bay Area Counties" + "</h3>";
+
+        // Loop through our counties array declared above
+        for (var i = 0; i < counties.length; i++) {
+
+          var color = getColor(counties[i]); // variable to hold color for each county from getColor function
+
+          // Build structure of the legend
+          div.innerHTML += '<span style="background:' + color + '"></span> ' + '<label>' + counties[i] + '</label>';
+        }
+        return div;
+       };
+       legend.addTo(map);
+      }
 
     </script>
 </body>
