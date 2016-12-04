@@ -310,12 +310,13 @@
           $li.addClass('selected');
 
           // create query based on data from the layer
-          //var query = "select * bayareacounties_best_data";
-          //if(familyType !== 'f1') {
-            //query = "select * bayareacounties_best_data where county = 'Contra Costa'";
-          //}
+          var query = "select * bayareacounties_best_data";
+          if(familyType !== 'f1') {
+            query = "select * bayareacounties_best_data where county = 'Contra Costa'";
+            console.log(query);
+          }
           //change the query in the layer to update the map
-          //layer.setSQL(query);
+          layer.setSQL(query);
         });
       }
 
