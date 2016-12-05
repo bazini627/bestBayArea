@@ -92,10 +92,21 @@
       display: block;
       clear: both;
     }
+    .info {
+      padding: 6px 8px;
+      font-size: 1em;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      text-align: right;
+    }
+    .info h3 {
+      margin: 0;
+    }
     #layer_selector {
       position: absolute;
       top: 20px;
-      right: 20px;
+      right: 900px;
       padding: 0;
     }
     #layer_selector ul {
@@ -137,56 +148,18 @@
     <h2>About The Data</h2>
     <p>Phasellus in ante nec augue pulvinar pellentesque id vitae nunc. Donec tincidunt metus metus, sed rhoncus ex vehicula sed. Donec erat felis, dignissim bibendum metus ut, tincidunt dictum ligula. Aliquam interdum gravida enim id aliquet. Duis sed ex sed mi aliquam hendrerit. Nunc egestas in lorem ac consectetur. Donec quis rhoncus metus.</p>
   </div>
-  <!-- CARTO CSS For County Layer -->
-  <script type="cartocss/html" id="county-styles">
-    #layer {
-      polygon-fill: ramp([county], ('#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#bc80bd', '#fccde5', '#d9d9d9'), category(9));
-      line-width: 1;
-      line-color: black;
-      line-opacity: 0.5;
-    }
-  </script>
-  <!-- Div For CARTO Infowindow -->
-  <script type="infowindow/html" id="infowindow_template">
-      <div class="cartodb-popup">
-        <a href="#close" class="cartodb-popup-close-button close">x</a>
-         <div class="cartodb-popup-content-wrapper">
-           <div class="cartodb-popup-content">
-             <font:color=black>
-             <h4>County: {{county}}</h4>
-             <h4>Housing Costs: ${{a1f1}}</h4>
-             <h4>Utilities Costs: ${{a2f1}}</h4>
-             <h4>Food Costs: ${{a3f1}}</h4>
-             <h4>Transportation Costs: ${{a4f1}}</h4>
-             <h4>Childcare Costs: ${{a5f1}}</h4>
-             <h4>Personal And Household Item Costs: ${{a6f1}}</h4>
-             <h4>Healthcare Costs: ${{a7f1}}</h4>
-             <h4>Emergency Savings: ${{a8f1}}</h4>
-             <h4>Retirement Savings: ${{a9f1}}</h4>
-             <h4>Taxes: ${{a10f1}}</h4>
-             <h4>Tax Credits: ${{a11f1}}</h4>
-             <h4>Monthly Total: ${{a12f1}}</h4>
-             <h4>Annual Total: ${{a13f1}}</h4>
-             <h4>Hourly Wage: ${{a14f1}}</h4>
-             </font>
-           </div>
-         </div>
-         <div class="cartodb-popup-tip-container"></div>
-      </div>
-    </script>
-    <!-- Div For CARTO Layer Selector -->
-    <div id="layer_selector" class="cartodb-infobox">
-      <span>Select A Family Type</span>
-      <ul>
-        <li data="f1" class="selected">Single Worker, No Children</li>
-        <li data="f2">Single Worker With Infant</li>
-        <li data="f3">Two Workers, No Children</li>
-        <li data="f4">Two Workers, With Infant</li>
-      </ul>
-    </div>
+  <!-- Div For CARTO Layer Selector -->
+  <div id="layer_selector" class="cartodb-infobox">
+    <span>Select A Family Type</span>
+    <ul>
+      <li data="f1" class="selected">Single Worker, No Children</li>
+      <li data="f2">Single Worker With Infant</li>
+      <li data="f3">Two Workers, No Children</li>
+      <li data="f4">Two Workers, With Infant</li>
+    </ul>
+  </div>
 
   <script>
-
     // Object to hold our map options
     var options = {
       center: [37.8741, -122.25],
@@ -207,55 +180,58 @@
     // Disable map dragging
     map.dragging.disable();
 
-    // Our CARTO data
-    var sourceObject = {
-      user_name: 'mjbmaps',
-      type: 'cartodb',
-      sublayers: [
-        {
-          sql: "SELECT * FROM bayareacounties_best_data",
-          cartocss: $("#county-styles").text()
-        }
-      ]
-    }
+    // Get GeoJSON hosted on CARTO
+    $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacounties_best_data', function(data) {
 
-    // Call to functions on window load
-    window.onload = function () {
-      drawMap();
+      console.log(data); // you have access to the geojson data here!
+      drawMap(data);  // Call funtion to draw the counties from the GeoJSON
+      drawInfo();
+    })
+    // Error catching with jquery fail method in case there is an issue with loading the GeoJSON
+    .fail(function() {
+      // Error message to let us know there is an issue with loading the GeoJSON
+      console.log("Unable to load your GeoJSON file");
+    });
+
+    // Function to draw counties to the map
+    function drawMap(data) {
+      dataLayer = L.geoJson(data, {
+        style: style // Using our style function from below
+      }).addTo(map);
+
+      // Call function to draw the legend same time as map
       drawLegend();
+
+      dataLayer.eachLayer(function(layer) {
+
+        // Highlight the layer and update info window on a mouseover
+        layer.on('mouseover', function() {
+          // Pass 'this'(layer/county moused over) to highlightFeature and updateInfo functions from below
+          highlightFeature(this);
+          updateInfo(this);
+        });
+
+        // Show info window when county is moused over
+        dataLayer.on('mouseover', function() {
+          // Use jquery show method to display the info window
+          $(".info").show();
+        });
+
+        // Remove the highlight on a mouseout
+        layer.on('mouseout', function() {
+          // Pass 'this' (layer/county currently highlighted) to unHighlightFeature function from below
+          unHighlightFeature(this);
+        });
+
+        // Hide info panel when the map is moused out of
+        dataLayer.on('mouseout', function() {
+          // Use jquery hide method to hide the info window
+          $(".info").hide();
+        })
+      })
     }
 
-    // Function to draw map
-    function drawMap() {
-      cartodb.createLayer(map, sourceObject).addTo(map)
-      .on('done', function(layer) {
-
-        console.log("Map loaded");
-
-        // Get the first sublayer and assign to variable to be passed to addInfowindow
-        var sublayer = layer.getSubLayer(0);
-
-        // Another infowindow option
-        cartodb.vis.Vis.addInfowindow(map, sublayer, ['county', 'a1f1', 'a2f1','a3f1','a4f1','a5f1','a6f1','a7f1','a8f1','a9f1','a10f1','a11f1','a12f1','a13f1','a14f1'],{
-        infowindowTemplate: $('#infowindow_template').html(),
-                 templateType: 'mustache',
-                 //triggerEvent: 'featureClick',
-                 //cursorInteraction: true
-      });
-
-        // Create info window
-        //cartodb.vis.Vis.addInfowindow(map, sublayer, ['county', 'a1f1', 'a2f1','a3f1','a4f1','a5f1','a6f1','a7f1','a8f1','a9f1','a10f1','a11f1','a12f1','a13f1','a14f1']);
-
-        // Call to the createSelector function
-        createSelector(sublayer);
-        })
-        .on('error', function(err) {
-          console.log(err);
-        });
-      }
-
-
-    // Function to color our counties in the legend
+    // Function to color our counties
     function getColor(d) {
       return d == "Alameda"        ? '#8dd3c7' :
              d == "Contra Costa"   ? '#ffffb3' :
@@ -268,58 +244,78 @@
                                      '#d9d9d9';
     }
 
+    // Function to set the style of our counties
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.county),
+        weight: 1,
+        opacity: 1,
+        color: 'black',
+        fillOpacity: 0.7
+      };
+    }
+
     // Function to create legend
     function drawLegend() {
       // Variable for our Leaflet Control object
       var legend = L.control({position: 'bottomleft'});
-
       // Anonymous function to create html elements of our legend
       legend.onAdd = function () {
-
         var div      = L.DomUtil.create('div', 'legend'),
         counties     = ['Alameda', 'Contra Costa', 'Marin', 'Napa', 'San Francisco', 'San Mateo', 'Santa Clara', 'Solano', 'Sonoma'];
-
         div.innerHTML = "<h3>" + "Bay Area Counties" + "</h3>";
-
         // Loop through our counties array declared above
         for (var i = 0; i < counties.length; i++) {
-
           var color = getColor(counties[i]); // variable to hold color for each county from getColor function
-
           // Build structure of the legend
           div.innerHTML += '<span style="background:' + color + '"></span> ' + '<label>' + counties[i] + '</label>';
         }
         return div;
-       };
-       legend.addTo(map);
+      };
+      legend.addTo(map);
+    }
+
+    // Function to highlight county to be used with a mouseover
+    function highlightFeature(layer) {
+      layer.setStyle({
+        weight: 5,
+        color: 'yellow',
+        fillOpacity: 1
+      });
+      layer.bringToFront();
+    }
+
+    // Function to unhighlight our highlighted county
+    function unHighlightFeature(layer) {
+      layer.setStyle({
+        weight: 1,
+        color: 'black',
+      });
+    }
+
+    // Function to draw an empty info panel which will be populated with info from our geojson
+    function drawInfo() {
+      // Placing our info panel on the top right of our page
+      var info = L.control( {position: 'topright'} );
+      // Anonymous function to create html elements of our info panel
+      info.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'info');
+        return div;
       }
+      info.addTo(map);
+      // Initially hide info panel with jQuery hide method
+      $(".info").hide();
+    }
 
-    // Function to create layer selector
-      function createSelector(layer) {
-        var sql = new cartodb.SQL({ user: 'mjbmaps' });
+    // Function to update our info panel
+    function updateInfo(layer) {
+      var props = layer.feature.properties; // create shorthand variable for properties again
 
-        var $options = $('#layer_selector li');
-        $options.click(function(e) {
+      var html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f1'] + "</b><br>" + "Utilities: <b>$" + props['a2f1'] + "</b><br>" + "Food: <b>$" + props['a3f1'] + "</b><br>" + "Transportation: <b>$" + props['a4f1'] + "</b><br>" + "Childcare: <b>$" + props['a5f1'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f1']  + "</b><br>" + "Healthcare: <b>$" + props['a7f1'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f1'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f1'] + "</b><br>" + "Taxes: <b>$" + props['a10f1'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f1'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f1'] + "</b><br>" + "Annual Total: <b>$" + props['a13f1'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f1'];
 
-          // Variable to hold the selected layer (which is a jquery object, noted with $)
-          var $li = $(e.target);
-          var familyType = $li.attr('data');
-
-          // deselect all and select the clicked one
-          $options.removeClass('selected');
-          $li.addClass('selected');
-
-          // create query based on data from the layer
-          var query = "select * bayareacounties_best_data";
-          if(familyType !== 'f1') {
-            query = "select * bayareacounties_best_data where county = 'Contra Costa'";
-            console.log(query);
-          }
-          //change the query in the layer to update the map
-          layer.setSQL(query);
-        });
-      }
-
+      // Use jQuery html method to populate panel
+      $(".info").html(html);
+    }
 
     </script>
 </body>
