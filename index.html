@@ -201,6 +201,9 @@
 
       // Call function to draw the legend same time as map
       drawLegend();
+      
+      // Call to the createSelector function
+      createSelector(dataLayer);
 
       dataLayer.eachLayer(function(layer) {
 
@@ -317,6 +320,21 @@
       $(".info").html(html);
     }
 
+    // Function to create layer selector
+      function createSelector(layer) {
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+
+          // Variable to hold the selected layer (which is a jquery object, noted with $)
+          var $li = $(e.target);
+          var familyType = $li.attr('data');
+
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+          console.log("Family type selected was " + familyType);
+        });
+      }
     </script>
 </body>
 </html>
