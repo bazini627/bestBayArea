@@ -201,9 +201,6 @@
 
       // Call function to draw the legend same time as map
       drawLegend();
-      
-      // Call to the createSelector function
-      createSelector(dataLayer);
 
       dataLayer.eachLayer(function(layer) {
 
@@ -231,6 +228,8 @@
           // Use jquery hide method to hide the info window
           $(".info").hide();
         })
+        // Call to the createSelector function
+        createSelector(layer);
       })
     }
 
@@ -333,6 +332,14 @@
           $options.removeClass('selected');
           $li.addClass('selected');
           console.log("Family type selected was " + familyType);
+          var props = layer.feature.properties; // shorthand again
+          var html;
+
+          // if elseif for family types
+          if (familyType == 'f2'){
+            console.log(props);
+            html = html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f2'] + "</b><br>" + "Utilities: <b>$" + props['a2f2'] + "</b><br>" + "Food: <b>$" + props['a3f2'] + "</b><br>" + "Transportation: <b>$" + props['a4f2'] + "</b><br>" + "Childcare: <b>$" + props['a5f2'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f2']  + "</b><br>" + "Healthcare: <b>$" + props['a7f2'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f2'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f2'] + "</b><br>" + "Taxes: <b>$" + props['a10f2'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f2'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f2'] + "</b><br>" + "Annual Total: <b>$" + props['a13f2'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f2'];
+          }
         });
       }
     </script>
