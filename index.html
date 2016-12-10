@@ -170,6 +170,7 @@
       zoomControl: false,
     },
     map = L.map('map', options); // Create map object and pass it our options object from above
+
     // Load a map tile and add it to the map
     var tiles = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -180,6 +181,7 @@
     // Disable map dragging
     map.dragging.disable();
 
+    // Global variable and object for family types
     var familyType = "f1",
         famTypeCodes = {
           "f1": "Single Worker, No Children",
@@ -190,9 +192,8 @@
 
     // Get GeoJSON hosted on CARTO
     $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacounties_best_data', function(data) {
-      console.log(data); // you have access to the geojson data here!
-      drawMap(data);  // Call funtion to draw the counties from the GeoJSON
-      drawInfo();
+      drawMap(data);    // Call funtion to draw the counties from the GeoJSON
+      drawInfo();       // Call to drawInfo function
       createSelector(); // Call to the createSelector function
     })
 
@@ -209,8 +210,8 @@
         style: style // Using our style function from below
       }).addTo(map);
 
-      // Call function to draw the legend same time as map
-      drawLegend();
+      drawLegend(); // Call function to draw the legend same time as map
+
       dataLayer.eachLayer(function(layer) {
 
         // Highlight the layer and update info window on a mouseover
@@ -329,7 +330,7 @@
 
     // Function to update our info panel
     function updateInfo(layer) {
-      var props = layer.feature.properties; // shorthand again
+      var props = layer.feature.properties; // shorthand for to get at properties
       console.log(props)
       console.log(props['a1' + familyType])
       var html = "<h3>" + props['county'] + " County: " + famTypeCodes[familyType] + "</h3>" + "Housing: <b>$" + props['a1' + familyType] + "</b><br>" + "Utilities: <b>$" + props['a2' + familyType] + "</b><br>" + "Food: <b>$" + props['a3' + familyType] + "</b><br>" + "Transportation: <b>$" + props['a4' + familyType] + "</b><br>" + "Childcare: <b>$" + props['a5' + familyType] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b>$" + props['a7' + familyType] + "</b><br>" + "Emergency Savings: <b>$" + props['a8' + familyType] + "</b><br>" + "Retirement Savings: <b>$" + props['a9' + familyType] + "</b><br>" + "Taxes: <b>$" + props['a10' + familyType] + "</b><br>" + "Tax Credits: <b>$" + props['a11' + familyType] + "</b><br>" + "<hr>" + "</b><br>" + "Monthly Total: <b>$" + props['a12' + familyType] + "</b><br>" + "Annual Total: <b>$" + props['a13' + familyType] + "</b><br>" + "Hourly Wage: <b>$" + props['a14' + familyType];
@@ -340,10 +341,13 @@
       function createSelector(layer) {
         var $options = $('#layer_selector li');
         $options.click(function(e) {
+
           // Variable to hold the selected layer (which is a jquery object, noted with $)
           var $li = $(e.target);
-          // update global variable with new familty type code
+
+          // Update global variable with new familty type code
           familyType = $li.attr('data');
+
           // deselect all and select the clicked one
           $options.removeClass('selected');
           $li.addClass('selected');
