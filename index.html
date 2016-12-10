@@ -99,6 +99,7 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       border-radius: 5px;
       text-align: right;
+      width: 220px;
     }
     .info h3 {
       margin: 0;
@@ -180,12 +181,22 @@
     // Disable map dragging
     map.dragging.disable();
 
+    var familyType = "f1",
+        famTypeCodes = {
+          "f1": "single worker, no child",
+          "f2": "single worker with infant",
+          "f3": "two workers, no children",
+          "f4": "two workers, with infant"
+        }
+
     // Get GeoJSON hosted on CARTO
     $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacounties_best_data', function(data) {
 
       console.log(data); // you have access to the geojson data here!
       drawMap(data);  // Call funtion to draw the counties from the GeoJSON
       drawInfo();
+
+      createSelector(); // Call to the createSelector function
     })
     // Error catching with jquery fail method in case there is an issue with loading the GeoJSON
     .fail(function() {
@@ -208,8 +219,8 @@
         layer.on('mouseover', function() {
           // Pass 'this'(layer/county moused over) to highlightFeature and updateInfo functions from below
           highlightFeature(this);
-          //updateInfo(this);
-          createSelector(this);
+          updateInfo(this);
+
         });
 
         // Show info window when county is moused over
@@ -229,8 +240,7 @@
           // Use jquery hide method to hide the info window
           $(".info").hide();
         })
-        // Call to the createSelector function
-        //createSelector(layer);
+
       })
     }
 
@@ -311,14 +321,17 @@
     }
 
     // Function to update our info panel
-    // function updateInfo(layer) {
-    //   var props = layer.feature.properties; // create shorthand variable for properties again
-    //
-    //   var html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f1'] + "</b><br>" + "Utilities: <b>$" + props['a2f1'] + "</b><br>" + "Food: <b>$" + props['a3f1'] + "</b><br>" + "Transportation: <b>$" + props['a4f1'] + "</b><br>" + "Childcare: <b>$" + props['a5f1'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f1']  + "</b><br>" + "Healthcare: <b>$" + props['a7f1'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f1'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f1'] + "</b><br>" + "Taxes: <b>$" + props['a10f1'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f1'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f1'] + "</b><br>" + "Annual Total: <b>$" + props['a13f1'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f1'];
-    //
-    //   // Use jQuery html method to populate panel
-    //   $(".info").html(html);
-    // }
+    function updateInfo(layer) {
+
+      var props = layer.feature.properties; // shorthand again
+      console.log(props)
+      console.log(props['a1' + familyType])
+
+      var html = "<h3>" + props['county'] + " County: " + famTypeCodes[familyType] + "</h3>" + "Housing: <b>$" + props['a1' + familyType] + "</b><br>" + "Utilities: <b>$" + props['a2' + familyType] + "</b><br>" + "Food: <b>$" + props['a3' + familyType] + "</b><br>" + "Transportation: <b>$" + props['a4' + familyType] + "</b><br>" + "Childcare: <b>$" + props['a5' + familyType] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b>$" + props['a7' + familyType] + "</b><br>" + "Emergency Savings: <b>$" + props['a8' + familyType] + "</b><br>" + "Retirement Savings: <b>$" + props['a9' + familyType] + "</b><br>" + "Taxes: <b>$" + props['a10' + familyType] + "</b><br>" + "Tax Credits: <b>$" + props['a11' + familyType] + "</b><br>" + "<hr>" + "</b><br>" + "Monthly Total: <b>$" + props['a12' + familyType] + "</b><br>" + "Annual Total: <b>$" + props['a13' + familyType] + "</b><br>" + "Hourly Wage: <b>$" + props['a14' + familyType];
+
+      $(".info").html(html);
+
+    }
 
     // Function to create layer selector
       function createSelector(layer) {
@@ -327,32 +340,18 @@
 
           // Variable to hold the selected layer (which is a jquery object, noted with $)
           var $li = $(e.target);
-          var familyType = $li.attr('data');
+
+          // update global variable with new familty type code
+          familyType = $li.attr('data');
 
           // deselect all and select the clicked one
           $options.removeClass('selected');
           $li.addClass('selected');
+          
           console.log("Family type selected was " + familyType);
 
-          var props = layer.feature.properties; // shorthand again
-          var html;
 
-          // if elseif for family type
-          if (familyType == 'f2'){
-            console.log(props);
-            html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f2'] + "</b><br>" + "Utilities: <b>$" + props['a2f2'] + "</b><br>" + "Food: <b>$" + props['a3f2'] + "</b><br>" + "Transportation: <b>$" + props['a4f2'] + "</b><br>" + "Childcare: <b>$" + props['a5f2'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f2']  + "</b><br>" + "Healthcare: <b>$" + props['a7f2'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f2'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f2'] + "</b><br>" + "Taxes: <b>$" + props['a10f2'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f2'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f2'] + "</b><br>" + "Annual Total: <b>$" + props['a13f2'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f2'];
-            $(".info").html(html);
-          }
-          else if (familyType == 'f3'){
 
-            html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f3'] + "</b><br>" + "Utilities: <b>$" + props['a2f3'] + "</b><br>" + "Food: <b>$" + props['a3f3'] + "</b><br>" + "Transportation: <b>$" + props['a4f3'] + "</b><br>" + "Childcare: <b>$" + props['a5f3'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f3']  + "</b><br>" + "Healthcare: <b>$" + props['a7f3'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f3'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f3'] + "</b><br>" + "Taxes: <b>$" + props['a10f3'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f3'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f3'] + "</b><br>" + "Annual Total: <b>$" + props['a13f3'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f3'];
-            $(".info").html(html);
-          }
-          else if (familyType == 'f4'){
-
-            html = "<h3>" + props['county'] + " County: " + props['FamilyType'] + "</h3>" + "Housing: <b>$" + props['a1f4'] + "</b><br>" + "Utilities: <b>$" + props['a2f4'] + "</b><br>" + "Food: <b>$" + props['a3f4'] + "</b><br>" + "Transportation: <b>$" + props['a4f4'] + "</b><br>" + "Childcare: <b>$" + props['a5f4'] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6f4']  + "</b><br>" + "Healthcare: <b>$" + props['a7f4'] + "</b><br>" + "Emergency Savings: <b>$" + props['a8f4'] + "</b><br>" + "Retirement Savings: <b>$" + props['a9f4'] + "</b><br>" + "Taxes: <b>$" + props['a10f4'] + "</b><br>" + "Tax Credits: <b>$" + props['a11f4'] + "</b><br>" + "_________________" + "</b><br>" + "Monthly Total: <b>$" + props['a12f4'] + "</b><br>" + "Annual Total: <b>$" + props['a13f4'] + "</b><br>" + "Hourly Wage: <b>$" + props['a14f4'];
-            $(".info").html(html);
-          }
         });
       }
     </script>
