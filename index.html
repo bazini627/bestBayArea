@@ -155,8 +155,10 @@
     <ul>
       <li data="f1" class="selected">Single Worker, No Children</li>
       <li data="f2">Single Worker, With Infant</li>
-      <li data="f3">Two Workers, No Children</li>
-      <li data="f4">Two Workers, With Infant</li>
+      <li data="f3">Single Worker, With Preschooler</li>
+      <li data="f4">Two Workers, No Children</li>
+      <li data="f5">Two Workers, With Infant</li>
+      <li data="f6">Two Workers, With Preschooler</li>
     </ul>
   </div>
 
@@ -186,12 +188,14 @@
         famTypeCodes = {
           "f1": "Single Worker, No Children",
           "f2": "Single Worker, With Infant",
-          "f3": "Two Workers, No Children",
-          "f4": "Two Workers, With Infant"
+          "f3": "Single Worker, With Preschooler",
+          "f4": "Two Workers, No Children",
+          "f5": "Two Workers, With Infant",
+          "f6": "Two Workers, With Preschooler"
         }
 
     // Get GeoJSON hosted on CARTO
-    $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacounties_best_data', function(data) {
+    $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacountiesbestnew', function(data) {
       drawMap(data);    // Call funtion to draw the counties from the GeoJSON
       drawInfo();       // Call to drawInfo function
       createSelector(); // Call to the createSelector function
@@ -335,7 +339,7 @@
       var props = layer.feature.properties; // shorthand for to get at properties
       console.log(props)
       console.log(props['a1' + familyType])
-      var html = "<h3>" + props['county'] + " County: " + famTypeCodes[familyType] + "</h3>" + "Housing: <b>$" + props['a1' + familyType] + "</b><br>" + "Utilities: <b>$" + props['a2' + familyType] + "</b><br>" + "Food: <b>$" + props['a3' + familyType] + "</b><br>" + "Transportation: <b>$" + props['a4' + familyType] + "</b><br>" + "Childcare: <b>$" + props['a5' + familyType] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b>$" + props['a7' + familyType] + "</b><br>" + "Emergency Savings: <b>$" + props['a8' + familyType] + "</b><br>" + "Retirement Savings: <b>$" + props['a9' + familyType] + "</b><br>" + "Taxes: <b>$" + props['a10' + familyType] + "</b><br>" + "Tax Credits: <b>$" + props['a11' + familyType] + "</b><br>" + "<hr>" + "</b><br>" + "Monthly Total: <b>$" + props['a12' + familyType] + "</b><br>" + "Annual Total: <b>$" + props['a13' + familyType] + "</b><br>" + "Hourly Wage: <b>$" + props['a14' + familyType];
+      var html = "<h3>" + props['county'] + " County: " + famTypeCodes[familyType] + "</h3>" + "Housing: <b>$" + props['a1' + familyType] + "</b><br>" + "Utilities: <b>$" + props['a2' + familyType] + "</b><br>" + "Food: <b>$" + props['a3' + familyType] + "</b><br>" + "Transportation: <b>$" + props['a4' + familyType] + "</b><br>" + "Childcare: <b>$" + props['a5' + familyType] + "</b><br>" + "Personal & Household Items: <b>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b>$" + props['a7' + familyType] + "</b><br>" + "Emergency Savings: <b>$" + props['a8' + familyType] + "</b><br>" + "Retirement Savings: <b>$" + props['a9' + familyType] + "</b><br>" + "Taxes: <b>$" + props['a10' + familyType] + "</b><br>" + "Tax Credits: <b>$" + props['a11' + familyType] + "</b><br>" + "<hr>" + "</b><br>" + "Monthly Total: <b>$" + props['a12' + familyType] + "</b><br>" + "Annual Total: <b>$" + props['a13' + familyType] + "</b><br>" + "Hourly Wage (Per Worker): <b>$" + props['a14' + familyType];
       $(".info").html(html);
     }
 
