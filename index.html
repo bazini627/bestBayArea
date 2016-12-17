@@ -110,7 +110,7 @@
     #layer_selector {
       position: absolute;
       background: rgba(255, 255, 255,0.8);
-      top: 20px;
+      bottom: 20px;
       left: 33.5%;
       padding: 0;
     }
@@ -280,7 +280,7 @@
     function drawLegend() {
 
       // Variable for our Leaflet Control object
-      var legend = L.control({position: 'bottomleft'});
+      var legend = L.control({position: 'topleft'});
 
       // Anonymous function to create html elements of our legend
       legend.onAdd = function () {
