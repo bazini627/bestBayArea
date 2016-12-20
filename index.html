@@ -136,6 +136,16 @@
     #layer_selector span {
       padding: 15px 30px;
     }
+      #ui-controls {
+      position: relative;
+      margin-left: 34%;
+      z-index: 650;
+    }
+    #ui-controls label {
+      font-size: 1em;
+      margin-right: 5px;
+      color: whitesmoke;
+    }
     .cartodb-logo {
       display:none!important;
     }
@@ -152,7 +162,18 @@
     <h2>About The Data</h2>
     <p>Bay Area county boundary data comes from <a href="https://data.sfgov.org/Geographic-Locations-and-Boundaries/Bay-Area-Counties/s9wg-vcph" target="_blank">SF OpenData</a>. Economic security data for the Bay Area comes from the <a href="http://www.basiceconomicsecurity.org/best/" target="_blank">Basic Economic Security Tables Index</a> which was created collaboratively by <a href="http://www.wowonline.org/" target="_blank">Wider Opportunities for Women</a> and the <a href="https://csd.wustl.edu/Pages/default.aspx" target="_blank">Center for Social Development</a> at Washington University-St. Louis.  Currently, the BEST data sets are maintained by the <a href="http://iwpr.org/" target="_blank">Institute for Women's Policy Research</a>.  For a breakdown of the expenses outlined in the BEST data refer to <a href="http://www.basiceconomicsecurity.org/BEST/definition.aspx" target="_blank">this</a> section of the BEST website. The BEST methodology and supplemental data is available <a href="http://www.wowonline.org/documents/USBESTMethodologyReport.pdf" target="_blank">here</a>.</p>
   </div>
-  <!-- Div For CARTO Layer Selector -->
+  <div id='ui-controls'>
+    <label>Choose A Family Type:</label>
+    <select id="FamilyType">
+      <option value="f1">Single Worker, No Children</option>
+      <option value="f2">Single Worker, With Infant</option>
+      <option value="f3">Single Worker, With Preschooler</option>
+      <option value="f4">Two Workers, No Children</option>
+      <option value="f5">Two Workers, With Infant</option>
+      <option value="f6">Two Workers, With Preschooler</option>
+    </select>
+  </div>
+  <!-- Div For CARTO Layer Selector 12/20/16 Commenting out for now to use dropdown
   <div id="layer_selector" class="cartodb-infobox">
     <span>Select A Family Type</span>
     <ul>
@@ -163,7 +184,7 @@
       <li data="f5">Two Workers, With Infant</li>
       <li data="f6">Two Workers, With Preschooler</li>
     </ul>
-  </div>
+  </div> -->
 
   <script>
     // Object to hold our map options
@@ -201,7 +222,8 @@
     $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacountiesbestnew', function(data) {
       drawMap(data);    // Call funtion to draw the counties from the GeoJSON
       drawInfo();       // Call to drawInfo function
-      createSelector(); // Call to the createSelector function
+      //createSelector(); // Call to the createSelector function Commented out 12/20/16
+      buildUI();        // Call to buildUI function  
     })
 
     // Error catching with jquery fail method in case there is an issue with loading the GeoJSON
@@ -363,6 +385,17 @@
 
           console.log("Family type selected was " + familyType);
         });
+      }
+    
+    // Function to use dropdown layer selector since original selector takes up a lot of real estate on small screens
+      function buildUI(layer) {
+        // Use the 'FamilyType' id we set previosly in our generic div wrapper in our jquery select
+        $('select[id="FamilyType"]').change(function() {
+
+          // Make new assignment to our global 'attribute' variable with a selection from the drop down
+          familyType = $(this).val();
+          console.log(familyType);
+        })
       }
     </script>
 </body>
