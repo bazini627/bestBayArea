@@ -261,6 +261,7 @@
 
     // Function to draw counties to the map
     function drawMap(data) {
+
       dataLayer = L.geoJson(data, {
         style: style // Using our style function from below
       }).addTo(map);
@@ -277,12 +278,7 @@
           updateInfo(this);
         });
 
-        // Show info window when county is moused over
-        dataLayer.on('mouseover', function() {
 
-          // Use jquery show method to display the info window
-          $(".info").show();
-        });
 
         // Remove the highlight on a mouseout
         layer.on('mouseout', function() {
@@ -290,13 +286,20 @@
           // Pass 'this' (layer/county currently highlighted) to unHighlightFeature function from below
           unHighlightFeature(this);
         });
+      })
 
-        // Hide info panel when the map is moused out of
-        dataLayer.on('mouseout', function() {
+      // Show info window when county is moused over
+      dataLayer.on('mouseover', function() {
 
-          // Use jquery hide method to hide the info window
-          $(".info").hide();
-        })
+        // Use jquery show method to display the info window
+        $(".info").show();
+      });
+
+      // Hide info panel when the map is moused out of
+      dataLayer.on('mouseout', function() {
+
+        // Use jquery hide method to hide the info window
+        $(".info").hide();
       })
     }
 
@@ -387,10 +390,11 @@
 
     // Function to update our info panel
     function updateInfo(layer) {
+
       var props = layer.feature.properties; // shorthand for to get at properties
-      console.log(props)
-      console.log(props['a1' + familyType])
+
       var html = "<h3><span>" + props['county'] + "</span> County: " + famTypeCodes[familyType] + "</span></h3>" + "Housing: <b><span>$" + props['a1' + familyType] + "</span></b><br>" + "Utilities: <b><span>$" + props['a2' + familyType] + "</span></b><br>" + "Food: <b><span>$" + props['a3' + familyType] + "</span></b><br>" + "Transportation: <b><span>$" + props['a4' + familyType] + "</span></b><br>" + "Childcare: <b><span>$" + props['a5' + familyType] + "</span></b><br>" + "Personal & Household Items: <b><span>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b><span>$" + props['a7' + familyType] + "</span></b><br>" + "Emergency Savings: <b><span>$" + props['a8' + familyType] + "</span></b><br>" + "Retirement Savings: <b><span>$" + props['a9' + familyType] + "</span></b><br>" + "Taxes: <b><span>$" + props['a10' + familyType] + "</span></b><br>" + "Tax Credits: <b><span>$" + props['a11' + familyType] + "</span></b><br>" + "<hr>" + "Monthly Total: <b><span>$" + props['a12' + familyType] + "</span></b><br>" + "Annual Total: <b><span>$" + props['a13' + familyType] + "</span></b><br>" + "Hourly Wage (Per Worker): <b><span>$" + props['a14' + familyType] + "</span>";
+
       $(".info").html(html);
     }
 
