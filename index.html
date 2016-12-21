@@ -146,7 +146,7 @@
     #layer_selector span {
       padding: 15px 30px;
     }
-      #ui-controls {
+    #ui-controls {
       position: relative;
       margin-left: 34%;
       z-index: 650;
@@ -233,7 +233,7 @@
       drawMap(data);    // Call funtion to draw the counties from the GeoJSON
       drawInfo();       // Call to drawInfo function
       //createSelector(); // Call to the createSelector function Commented out 12/20/16
-      buildUI();        // Call to buildUI function  
+      buildUI();        // Call to buildUI function
     })
 
     // Error catching with jquery fail method in case there is an issue with loading the GeoJSON
@@ -396,7 +396,7 @@
           console.log("Family type selected was " + familyType);
         });
       }
-    
+
     // Function to use dropdown layer selector since original selector takes up a lot of real estate on small screens
       function buildUI(layer) {
         // Use the 'FamilyType' id we set previosly in our generic div wrapper in our jquery select
