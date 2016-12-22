@@ -106,7 +106,7 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       border-radius: 5px;
       text-align: left;
-      width: 220px;
+      width: auto;
     }
     .info h3 {
       margin: 0;
@@ -215,7 +215,7 @@
   <script>
     // Object to hold our map options
     var options = {
-      center: [37.8741, -122.25],
+      center: [37.8741, -122.10],
       zoom: 8,
       minZoom: 8,
       maxZoom: 8,
@@ -393,7 +393,7 @@
 
       var props = layer.feature.properties; // shorthand for to get at properties
 
-      var html = "<h3><span>" + props['county'] + "</span> County: " + famTypeCodes[familyType] + "</span></h3>" + "Housing: <b><span>$" + props['a1' + familyType] + "</span></b><br>" + "Utilities: <b><span>$" + props['a2' + familyType] + "</span></b><br>" + "Food: <b><span>$" + props['a3' + familyType] + "</span></b><br>" + "Transportation: <b><span>$" + props['a4' + familyType] + "</span></b><br>" + "Childcare: <b><span>$" + props['a5' + familyType] + "</span></b><br>" + "Personal & Household Items: <b><span>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b><span>$" + props['a7' + familyType] + "</span></b><br>" + "Emergency Savings: <b><span>$" + props['a8' + familyType] + "</span></b><br>" + "Retirement Savings: <b><span>$" + props['a9' + familyType] + "</span></b><br>" + "Taxes: <b><span>$" + props['a10' + familyType] + "</span></b><br>" + "Tax Credits: <b><span>$" + props['a11' + familyType] + "</span></b><br>" + "<hr>" + "Monthly Total: <b><span>$" + props['a12' + familyType] + "</span></b><br>" + "Annual Total: <b><span>$" + props['a13' + familyType] + "</span></b><br>" + "Hourly Wage (Per Worker): <b><span>$" + props['a14' + familyType] + "</span>";
+      var html = "<h3>" + props['county'] + " County: " + famTypeCodes[familyType] + "</h3>" + "Housing: <b><span>$" + props['a1' + familyType] + "</span></b><br>" + "Utilities: <b><span>$" + props['a2' + familyType] + "</span></b><br>" + "Food: <b><span>$" + props['a3' + familyType] + "</span></b><br>" + "Transportation: <b><span>$" + props['a4' + familyType] + "</span></b><br>" + "Childcare: <b><span>$" + props['a5' + familyType] + "</span></b><br>" + "Personal & Household Items: <b><span>$" + props['a6' + familyType]  + "</b><br>" + "Healthcare: <b><span>$" + props['a7' + familyType] + "</span></b><br>" + "Emergency Savings: <b><span>$" + props['a8' + familyType] + "</span></b><br>" + "Retirement Savings: <b><span>$" + props['a9' + familyType] + "</span></b><br>" + "Taxes: <b><span>$" + props['a10' + familyType] + "</span></b><br>" + "Tax Credits: <b><span>$" + props['a11' + familyType] + "</span></b><br>" + "<hr>" + "Monthly Total: <b><span>$" + props['a12' + familyType] + "</span></b><br>" + "Annual Total: <b><span>$" + props['a13' + familyType] + "</span></b><br>" + "Hourly Wage (Per Worker): <b><span>$" + props['a14' + familyType] + "</span>";
 
       $(".info").html(html);
     }
