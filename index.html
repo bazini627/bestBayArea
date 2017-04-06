@@ -185,9 +185,10 @@
       <option value="f1">Single Worker, No Children</option>
       <option value="f2">Single Worker, With Infant</option>
       <option value="f3">Single Worker, With Preschooler</option>
-      <option value="f4">Two Workers, No Children</option>
-      <option value="f5">Two Workers, With Infant</option>
-      <option value="f6">Two Workers, With Preschooler</option>
+      <option value="f4">Single Worker, With Infant and Preschooler</option>
+      <option value="f5">Two Workers, No Children</option>
+      <option value="f6">Two Workers, With Infant</option>
+      <option value="f7">Two Workers, With Preschooler</option>
     </select>
   </div>
   <!-- Div For CARTO Layer Selector 12/20/16 Commenting out for now to use dropdown
@@ -230,13 +231,14 @@
           "f1": "Single Worker, No Children",
           "f2": "Single Worker, With Infant",
           "f3": "Single Worker, With Preschooler",
-          "f4": "Two Workers, No Children",
-          "f5": "Two Workers, With Infant",
-          "f6": "Two Workers, With Preschooler"
+          "f4": "Single Worker, With Infant and Preschooler",
+          "f5": "Two Workers, No Children",
+          "f6": "Two Workers, With Infant",
+          "f7": "Two Workers, With Preschooler"
         }
 
     // Get GeoJSON hosted on CARTO
-    $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacountiesbestnew', function(data) {
+    $.getJSON('https://mjbmaps.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM bayareacountiesbestnew2', function(data) {
       drawMap(data);    // Call funtion to draw the counties from the GeoJSON
       drawInfo();       // Call to drawInfo function
       //createSelector(); // Call to the createSelector function Commented out 12/20/16
